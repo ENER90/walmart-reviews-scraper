@@ -2,7 +2,7 @@
   "actorSpecification": 1,
   "name": "walmart-products-reviews",
   "title": "Walmart Reviews Scraper – Products & Ratings",
-  "description": "Scrapes Walmart product reviews (rating, title, text, date, verified purchase, helpful votes) plus product price, availability, rating breakdown and Walmart's AI review summary. Unofficial Walmart reviews API, no key needed. US$0.40 per 1,000 results. Optional AI insights with your own Gemini/OpenAI key: US$0.20 per 1,000 reviews analyzed.",
+  "description": "Scrapes Walmart reviews (rating, text, date, verified purchase, helpful votes) plus product price, availability, rating breakdown and Walmart's AI summary. Unofficial Walmart reviews API. US$0.40 per 1,000 results. Optional AI insights (own Gemini/OpenAI key): US$0.20/1k reviews.",
   "version": "0.1",
   "buildTag": "latest",
   "input": "./input_schema.json",
