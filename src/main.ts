@@ -1,8 +1,9 @@
 import { Actor, log } from 'apify';
+import { aiEnabled, runAiInsights, AiInput } from './ai.js';
 import { BasicCrawler } from 'crawlee';
 import { parseItemId, reviewsUrl, isBlocked, parsePage, SORTS, Sort } from './parsers.js';
 
-interface Input { startUrls?: ({ url: string } | string)[]; itemIds?: string[]; maxReviewsPerProduct?: number; sort?: Sort; includeProduct?: boolean; proxyConfiguration?: any }
+interface Input extends AiInput { startUrls?: ({ url: string } | string)[]; itemIds?: string[]; maxReviewsPerProduct?: number; sort?: Sort; includeProduct?: boolean; proxyConfiguration?: any }
 await Actor.init();
 const input = (await Actor.getInput<Input>()) ?? {};
 const max = input.maxReviewsPerProduct ?? 50;
@@ -43,4 +44,5 @@ const crawler = new BasicCrawler({
 await crawler.run(ids.map((id) => ({ url: reviewsUrl(id, 1, sort), userData: { itemId: id, page: 1 } })));
 const total = [...count.values()].reduce((a, b) => a + b, 0);
 await Actor.setValue('OUTPUT', { products: ids.map((id) => ({ itemId: id, reviews: count.get(id) ?? 0 })), totalReviews: total, blockedRetries: blocks });
+if (count.size && aiEnabled(input)) await runAiInsights(input, 'walmart');
 if (!count.size) await Actor.fail('No products could be scraped. See log.'); else await Actor.exit(`${count.size} product(s), ${total} reviews, ${blocks} blocked retries.`);
