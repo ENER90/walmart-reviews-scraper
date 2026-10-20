@@ -1,0 +1,3 @@
+{ "actorOutputSchemaVersion": 1, "title": "Walmart output", "description": "Product rows and reviews in the default dataset.",
+  "properties": { "reviews": { "type": "string", "title": "Reviews", "template": "{{links.apiDefaultDatasetUrl}}/items?view=reviews" },
+    "products": { "type": "string", "title": "Products", "template": "{{links.apiDefaultDatasetUrl}}/items?view=products" } } }

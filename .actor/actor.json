@@ -1,0 +1,16 @@
+{
+  "actorSpecification": 1,
+  "name": "walmart-products-reviews",
+  "title": "Walmart Products & Reviews Scraper",
+  "description": "Scrape Walmart product reviews (rating, title, text, date, verified purchase, helpful votes) plus product data: price, availability, rating breakdown and Walmart's AI review summary. No reviewer names.",
+  "version": "0.1",
+  "buildTag": "latest",
+  "input": "./input_schema.json",
+  "storages": {
+    "dataset": "./dataset_schema.json"
+  },
+  "output": "./output_schema.json",
+  "dockerfile": "./Dockerfile",
+  "readme": "./STORE_README.md",
+  "changelog": "../CHANGELOG.md"
+}

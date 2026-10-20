@@ -1,0 +1,7 @@
+{ "title": "Walmart Products & Reviews", "type": "object", "schemaVersion": 1, "properties": {
+  "startUrls": { "title": "Walmart product URLs", "type": "array", "editor": "requestListSources", "description": "e.g. https://www.walmart.com/ip/5113175776", "prefill": [{ "url": "https://www.walmart.com/ip/5113175776" }] },
+  "itemIds": { "title": "Item IDs", "type": "array", "editor": "stringList", "description": "Numeric Walmart item ids (the number at the end of /ip/ URLs)." },
+  "maxReviewsPerProduct": { "title": "Max reviews per product", "type": "integer", "default": 50, "minimum": 0, "maximum": 5000, "description": "10 reviews per page. Use 0 to get only the product row." },
+  "sort": { "title": "Sort", "type": "string", "editor": "select", "default": "submission-desc", "enum": ["submission-desc", "relevancy", "helpful", "rating-desc", "rating-asc"], "enumTitles": ["Newest", "Most relevant", "Most helpful", "Highest rating", "Lowest rating"], "description": "Review order." },
+  "includeProduct": { "title": "Include product row", "type": "boolean", "default": true, "description": "Price, availability, category, rating breakdown and Walmart's review summary." },
+  "proxyConfiguration": { "title": "Proxy", "type": "object", "editor": "proxy", "default": { "useApifyProxy": true, "apifyProxyGroups": ["RESIDENTIAL"], "apifyProxyCountry": "US" }, "description": "US residential proxy recommended." } } }

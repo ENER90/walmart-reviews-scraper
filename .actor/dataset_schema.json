@@ -1,0 +1,5 @@
+{ "actorSpecification": 1, "fields": {}, "views": {
+  "reviews": { "title": "Reviews", "transformation": { "fields": ["itemId", "productName", "date", "rating", "title", "text", "verifiedPurchase", "helpfulVotes", "photoCount", "sellerName"] },
+    "display": { "component": "table", "properties": { "date": { "format": "date" }, "rating": { "format": "number" }, "verifiedPurchase": { "format": "boolean" } } } },
+  "products": { "title": "Products", "transformation": { "fields": ["itemId", "name", "price", "availability", "averageRating", "totalReviews", "recommendedPercentage", "reviewsSummary", "url"] },
+    "display": { "component": "table", "properties": { "price": { "format": "number" }, "url": { "format": "link" } } } } } }
