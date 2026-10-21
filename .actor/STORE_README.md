@@ -2,6 +2,10 @@
 
 Pull Walmart product reviews (rating, text, date, verified purchase, helpful votes) together with the product itself: price, availability, rating breakdown, and the review summary Walmart generates for each product. I use it to check what buyers really think before picking a product to sell or compare.
 
+If you'd rather see it in action first, I recorded a short video tutorial:
+
+https://www.youtube.com/watch?v=ayv_TN0gfPY
+
 ![Input form with a Walmart product URL](https://raw.githubusercontent.com/ENER90/walmart-reviews-scraper/main/docs/screenshots/01-input.png)
 
 ## What you get
