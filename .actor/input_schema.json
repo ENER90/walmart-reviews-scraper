@@ -18,7 +18,10 @@
       "title": "Item IDs",
       "type": "array",
       "editor": "stringList",
-      "description": "Numeric Walmart item ids (the number at the end of /ip/ URLs)."
+      "description": "Numeric Walmart item ids (the number at the end of /ip/ URLs).",
+      "example": [
+        "5113175776"
+      ]
     },
     "maxReviewsPerProduct": {
       "title": "Max reviews per product",
@@ -26,7 +29,8 @@
       "default": 50,
       "minimum": 0,
       "maximum": 5000,
-      "description": "10 reviews per page. Use 0 to get only the product row."
+      "description": "10 reviews per page. Use 0 to get only the product row.",
+      "prefill": 50
     },
     "sort": {
       "title": "Sort",
@@ -47,20 +51,23 @@
         "Highest rating",
         "Lowest rating"
       ],
-      "description": "Review order."
+      "description": "Review order.",
+      "prefill": "submission-desc"
     },
     "includeProduct": {
       "title": "Include product row",
       "type": "boolean",
       "default": true,
-      "description": "Price, availability, category, rating breakdown and Walmart's review summary."
+      "description": "Price, availability, category, rating breakdown and Walmart's review summary.",
+      "prefill": true
     },
     "aiInsights": {
       "title": "AI insights per product (optional)",
       "type": "boolean",
       "default": false,
-      "sectionCaption": "🤖 AI insights (optional, bring your own key)",
-      "description": "Adds one 'ai-insight' row per product: sentiment %, top pros, cons, themes, feature requests, notable quotes and an executive summary. Requires your own Gemini or OpenAI API key. US$0.20 per 1,000 reviews analyzed (only when AI insights are on); AI tokens are billed by your provider. Off by default."
+      "sectionCaption": "AI insights (optional, bring your own key)",
+      "description": "Adds one 'ai-insight' row per product: sentiment %, top pros, cons, themes, feature requests, notable quotes and an executive summary. Requires your own Gemini or OpenAI API key. US$0.20 per 1,000 reviews analyzed (only when AI insights are on); AI tokens are billed by your provider. Off by default.",
+      "prefill": false
     },
     "aiProvider": {
       "title": "AI provider",
@@ -74,7 +81,8 @@
         "Google Gemini",
         "OpenAI"
       ],
-      "description": "Leave empty to auto-detect from the key (keys starting with 'sk-' are OpenAI, others Gemini)."
+      "description": "Leave empty to auto-detect from the key (keys starting with 'sk-' are OpenAI, others Gemini).",
+      "example": "gemini"
     },
     "aiApiKey": {
       "title": "AI API key",
@@ -87,14 +95,16 @@
       "title": "AI model",
       "type": "string",
       "editor": "textfield",
-      "description": "Optional. Default: gemini-3.1-flash-lite or gpt-4.1-mini."
+      "description": "Optional. Default: gemini-3.1-flash-lite or gpt-4.1-mini.",
+      "example": "gemini-3.1-flash-lite"
     },
     "aiLanguage": {
       "title": "AI output language",
       "type": "string",
       "editor": "textfield",
       "description": "Language of the AI text (e.g. English, Spanish, Portuguese).",
-      "default": "English"
+      "default": "English",
+      "prefill": "English"
     },
     "proxyConfiguration": {
       "title": "Proxy",
@@ -107,7 +117,15 @@
         ],
         "apifyProxyCountry": "US"
       },
-      "description": "US residential proxy recommended."
+      "description": "US residential proxy recommended.",
+      "prefill": {
+        "useApifyProxy": true,
+        "apifyProxyGroups": [
+          "RESIDENTIAL"
+        ],
+        "apifyProxyCountry": "US"
+      }
     }
-  }
+  },
+  "description": "Paste a Walmart product URL (or item ID), set how many reviews you want and click Start. The AI insights are optional."
 }
