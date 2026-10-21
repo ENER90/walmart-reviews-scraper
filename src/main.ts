@@ -6,14 +6,21 @@ import { parseItemId, reviewsUrl, isBlocked, parsePage, SORTS, Sort } from './pa
 interface Input extends AiInput { startUrls?: ({ url: string } | string)[]; itemIds?: string[]; maxReviewsPerProduct?: number; sort?: Sort; includeProduct?: boolean; proxyConfiguration?: any }
 await Actor.init();
 const input = (await Actor.getInput<Input>()) ?? {};
-const max = input.maxReviewsPerProduct ?? 50;
+const maxIn = Number.isFinite(Number(input.maxReviewsPerProduct)) && Number(input.maxReviewsPerProduct) >= 0 ? Math.floor(Number(input.maxReviewsPerProduct)) : 50;
 const sort: Sort = SORTS.includes(input.sort as Sort) ? (input.sort as Sort) : 'submission-desc';
 const now = new Date().toISOString();
 const ids: string[] = [];
-for (const r of [...(input.startUrls ?? []).map((u) => (typeof u === 'string' ? u : u.url)), ...(input.itemIds ?? [])]) {
-  try { const id = parseItemId(r); if (!ids.includes(id)) ids.push(id); } catch (e) { log.error((e as Error).message); }
+const toStr = (u: any): string => String(typeof u === 'object' && u ? u.url ?? '' : u ?? '').trim();
+let raw = [...(Array.isArray(input.startUrls) ? input.startUrls : []).map(toStr), ...(Array.isArray(input.itemIds) ? input.itemIds : []).map(toStr)].filter(Boolean);
+const demo = !raw.length;
+if (demo) { log.warning('No startUrls or itemIds given. Running a short demo with https://www.walmart.com/ip/5113175776 (5 reviews). Add your own Walmart URLs or item ids.'); raw = ['https://www.walmart.com/ip/5113175776']; }
+const max = demo ? Math.min(5, maxIn) : maxIn;
+const inputErrors: { type: 'error'; input: string; error: string }[] = [];
+for (const r of raw) {
+  try { const id = parseItemId(r); if (!ids.includes(id)) ids.push(id); } catch (e) { log.error((e as Error).message); inputErrors.push({ type: 'error', input: r, error: (e as Error).message }); }
 }
-if (!ids.length) throw new Error('Input error: add at least one Walmart product URL or item id.');
+if (inputErrors.length) await Actor.pushData(inputErrors);
+if (!ids.length) { const m = 'None of the given inputs is a Walmart product. Use a URL like https://www.walmart.com/ip/5113175776 or a numeric item id.'; log.error(m); await Actor.exit({ statusMessage: m }); }
 const proxy = await Actor.createProxyConfiguration(input.proxyConfiguration ?? { useApifyProxy: true, apifyProxyGroups: ['RESIDENTIAL'], apifyProxyCountry: 'US' });
 const count = new Map<string, number>();
 const seen = new Set<string>();
@@ -44,5 +51,5 @@ const crawler = new BasicCrawler({
 await crawler.run(ids.map((id) => ({ url: reviewsUrl(id, 1, sort), userData: { itemId: id, page: 1 } })));
 const total = [...count.values()].reduce((a, b) => a + b, 0);
 await Actor.setValue('OUTPUT', { products: ids.map((id) => ({ itemId: id, reviews: count.get(id) ?? 0 })), totalReviews: total, blockedRetries: blocks });
-if (count.size && aiEnabled(input)) await runAiInsights(input, 'walmart');
-if (!count.size) await Actor.fail('No products could be scraped. See log.'); else await Actor.exit(`${count.size} product(s), ${total} reviews, ${blocks} blocked retries.`);
+if (count.size && aiEnabled(input)) { try { await runAiInsights(input, 'walmart'); } catch (e) { log.error(`AI insights failed: ${(e as Error).message}`); } }
+if (!count.size) await Actor.exit({ statusMessage: 'No reviews could be scraped (product not found, no reviews, or Walmart blocked the request). See the log; try again later.' }); else await Actor.exit(`${count.size} product(s), ${total} reviews, ${blocks} blocked retries.`);
